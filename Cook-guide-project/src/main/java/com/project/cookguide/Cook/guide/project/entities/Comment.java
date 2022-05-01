@@ -1,6 +1,7 @@
 package com.project.cookguide.Cook.guide.project.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
 import java.sql.Date;
@@ -13,6 +14,7 @@ public class Comment {
     private Long cmtId;
     private String content;
     private String image;
+    @JsonFormat(pattern="yyyy-MM-dd")
     private Date date;
 
     @JsonBackReference

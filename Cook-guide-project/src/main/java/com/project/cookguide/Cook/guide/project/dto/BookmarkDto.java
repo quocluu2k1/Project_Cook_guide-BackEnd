@@ -1,9 +1,12 @@
 package com.project.cookguide.Cook.guide.project.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.sql.Date;
 
 public class BookmarkDto {
     private Long booId;
+    @JsonFormat(pattern="yyyy-MM-dd")
     private Date date;
     private Long UserId;
     private Long FoodId;

@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.multipart.MultipartFile;
 
 
 import java.util.ArrayList;
@@ -32,6 +33,8 @@ public class UserService {
     public static String getBearerTokenHeader() {
         return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getHeader("Authorization");
     }
+    @Autowired
+    IStorageService storageService;
     @Autowired
     JwtUtils jwtUtils;
     @Autowired
@@ -134,5 +137,23 @@ public class UserService {
         }
         return foodDtoList;
 
+    }
+
+    public Boolean changeAvatar(MultipartFile file){
+        String authToken = getBearerTokenHeader();
+        final String token = authToken.substring(7);
+        String username = jwtUtils.getUsernameFromToken(token);
+        User user = userRepository.findByUsername(username).get();
+        try {
+            String generatedFileName = storageService.storeFile(file);
+            if(user.getAvatar()!="avatar_default.jpg"){
+                storageService.deleteFile(user.getAvatar());
+            }
+            user.setAvatar("/images/avatar/"+generatedFileName);
+            userRepository.save(user);
+            return true;
+        }catch (Exception e){
+            throw new RuntimeException("Error: ",e);
+        }
     }
 }

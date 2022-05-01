@@ -16,6 +16,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -49,13 +50,13 @@ public class UserController {
     UserService userService;
 
     @GetMapping("/profile")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public UserDto getProfile(){
         return userService.getProfile();
     }
 
     @PutMapping("/profile/update")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public String updateProfile(@RequestBody UserDto userDto){
         if (userService.updateProfile(userDto)){
             return "Updated successfully!";
@@ -132,5 +133,12 @@ public class UserController {
     @ResponseBody
     public List<FoodDto> getBookmark(){
         return userService.getBookmark();
+    }
+
+    @PostMapping("/changeavatar")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    @ResponseBody
+    public Boolean changeAvatar(@RequestParam("file") MultipartFile file){
+        return userService.changeAvatar(file);
     }
 }

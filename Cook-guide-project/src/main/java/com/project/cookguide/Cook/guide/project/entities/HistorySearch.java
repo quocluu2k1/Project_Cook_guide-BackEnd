@@ -1,6 +1,7 @@
 package com.project.cookguide.Cook.guide.project.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
 import java.sql.Date;
@@ -12,6 +13,7 @@ public class HistorySearch {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long hisId;
     private String content;
+    @JsonFormat(pattern="yyyy-MM-dd")
     private Date date;
 
     @JsonBackReference

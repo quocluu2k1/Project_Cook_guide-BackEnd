@@ -1,5 +1,6 @@
 package com.project.cookguide.Cook.guide.project.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.project.cookguide.Cook.guide.project.entities.Food;
 
 import java.util.Date;
@@ -15,6 +16,7 @@ public class FoodDto {
     private String foodImage1;
     private String foodImage2;
     private String foodImage3;
+    @JsonFormat(pattern="yyyy-MM-dd")
     private Date date;
 
     public FoodDto(){}

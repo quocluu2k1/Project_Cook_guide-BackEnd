@@ -1,5 +1,6 @@
 package com.project.cookguide.Cook.guide.project.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
@@ -20,6 +21,7 @@ public class Food {
     private String foodImage1;
     private String foodImage2;
     private String foodImage3;
+    @JsonFormat(pattern="yyyy-MM-dd")
     private Date date;
 
 

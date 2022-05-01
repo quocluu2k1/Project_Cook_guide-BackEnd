@@ -2,20 +2,17 @@ package com.project.cookguide.Cook.guide.project.services;
 
 import com.project.cookguide.Cook.guide.project.common.JwtUtils;
 import com.project.cookguide.Cook.guide.project.dto.FoodDto;
-import com.project.cookguide.Cook.guide.project.entities.Bookmark;
-import com.project.cookguide.Cook.guide.project.entities.Food;
-import com.project.cookguide.Cook.guide.project.entities.Reaction;
-import com.project.cookguide.Cook.guide.project.entities.User;
-import com.project.cookguide.Cook.guide.project.repositories.BookmarkRepository;
-import com.project.cookguide.Cook.guide.project.repositories.FoodRepository;
-import com.project.cookguide.Cook.guide.project.repositories.ReactionRepository;
-import com.project.cookguide.Cook.guide.project.repositories.UserRepository;
+import com.project.cookguide.Cook.guide.project.dto.ImplementationDto;
+import com.project.cookguide.Cook.guide.project.dto.IngredientDto;
+import com.project.cookguide.Cook.guide.project.entities.*;
+import com.project.cookguide.Cook.guide.project.repositories.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -35,6 +32,12 @@ public class FoodService {
 
     @Autowired
     FoodRepository foodRepository;
+
+    @Autowired
+    IngredientRepository ingredientRepository;
+
+    @Autowired
+    ImplementationRepository implementationRepository;
 
     @Autowired
     BookmarkRepository bookmarkRepository;
@@ -224,7 +227,7 @@ public class FoodService {
         return foodDtoList;
     }
 
-    public Food getDetailCookGuide(Long id) {
+    public FoodDto getDetailCookGuide(Long id) {
         Food food = foodRepository.findById(id).get();
         Bookmark bookmark = bookmarkRepository.findByUserIdAndFoodId(2L,id);
 
@@ -247,8 +250,28 @@ public class FoodService {
         food.setComments(null);
         food.setBookmarks(null);
         food.setReactions(null);
+        FoodDto foodDto = modelMapper.map(food, FoodDto.class);
+        return foodDto;
+    }
 
-        return food;
+    public List<IngredientDto> getIngredientByFood(Long foodId){
+        List<IngredientDto> ingredientDtoList = new ArrayList<>();
+        List<Ingredient> ingredients = ingredientRepository.findByFoodId(foodId);
+        for(Ingredient ingredient : ingredients){
+            IngredientDto ingredientDto = modelMapper.map(ingredient, IngredientDto.class);
+            ingredientDtoList.add(ingredientDto);
+        }
+        return ingredientDtoList;
+    }
+
+    public List<ImplementationDto> getImplementationByFood(Long foodId){
+        List<ImplementationDto> implementationDtoList = new ArrayList<>();
+        List<Implementation> implementations = implementationRepository.findByFoodId(foodId);
+        for(Implementation implementation : implementations){
+            ImplementationDto implementationDto = modelMapper.map(implementation, ImplementationDto.class);
+            implementationDtoList.add(implementationDto);
+        }
+        return implementationDtoList;
     }
 
     public Boolean getStatusBookmarkFoodOfUser(Long foodId){

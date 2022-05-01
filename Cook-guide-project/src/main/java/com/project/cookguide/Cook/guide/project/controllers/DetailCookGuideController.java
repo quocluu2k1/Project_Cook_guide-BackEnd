@@ -1,7 +1,10 @@
 package com.project.cookguide.Cook.guide.project.controllers;
 
 import com.project.cookguide.Cook.guide.project.dto.FoodDto;
+import com.project.cookguide.Cook.guide.project.dto.ImplementationDto;
+import com.project.cookguide.Cook.guide.project.dto.IngredientDto;
 import com.project.cookguide.Cook.guide.project.entities.Food;
+import com.project.cookguide.Cook.guide.project.entities.Implementation;
 import com.project.cookguide.Cook.guide.project.services.FoodService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,8 +23,18 @@ public class DetailCookGuideController {
     FoodService foodService;
 
     @GetMapping("/detail/{id}")
-    public Food getDetailCookGuide(@PathVariable Long id){
+    public FoodDto getDetailCookGuide(@PathVariable Long id){
         return foodService.getDetailCookGuide(id);
+    }
+
+    @GetMapping("/getingredient/{id}")
+    public List<IngredientDto> getIngredientByFood(@PathVariable Long id){
+        return foodService.getIngredientByFood(id);
+    }
+
+    @GetMapping("/getimplementation/{id}")
+    public List<ImplementationDto> getImplementationByFood(@PathVariable Long id){
+        return foodService.getImplementationByFood(id);
     }
 
 
