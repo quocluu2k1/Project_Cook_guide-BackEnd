@@ -11,10 +11,10 @@ import java.util.List;
 
 @Repository
 public interface FoodRepository extends JpaRepository<Food, Long> {
-    @Query(value="SELECT * FROM food ORDER BY (n_claps+n_hearts+n_savoring) DESC LIMIT 5", nativeQuery = true)
+    @Query(value="SELECT * FROM food ORDER BY (SELECT sum(r_claps+r_hearts+r_savoring) from reaction) DESC LIMIT 5", nativeQuery = true)
     List<Food> getOutstandingFood();
 
-    @Query(value="SELECT * FROM food ORDER BY (n_claps+n_hearts+n_savoring) DESC LIMIT ?1,5", nativeQuery = true)
+    @Query(value="SELECT * FROM food ORDER BY (SELECT sum(r_claps+r_hearts+r_savoring) from reaction) DESC LIMIT ?1,5", nativeQuery = true)
     List<Food> getOutstandingFoodForNumberPage(int numberPage);
 
     @Query(value="SELECT * FROM food ORDER BY date DESC LIMIT 5", nativeQuery = true)
@@ -23,9 +23,9 @@ public interface FoodRepository extends JpaRepository<Food, Long> {
     @Query(value="SELECT * FROM food ORDER BY date DESC LIMIT ?1,5", nativeQuery = true)
     List<Food> getNewFoodForNumberPage(int numberPage);
 
-    @Query(value="SELECT * FROM food ORDER BY n_hearts DESC LIMIT 5", nativeQuery = true)
+    @Query(value="SELECT * FROM food ORDER BY (SELECT sum(r_hearts) from reaction) DESC LIMIT 5", nativeQuery = true)
     List<Food> getFavoriteFood();
 
-    @Query(value="SELECT * FROM food ORDER BY n_hearts DESC LIMIT ?1,5", nativeQuery = true)
+    @Query(value="SELECT * FROM food ORDER BY (SELECT sum(r_hearts) from reaction) DESC LIMIT ?1,5", nativeQuery = true)
     List<Food> getFavoriteFoodForNumberPage(int numberPage);
 }
